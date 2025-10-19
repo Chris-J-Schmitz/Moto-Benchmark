@@ -1,5 +1,13 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
+
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
+
+export const supabase = createClient(supabaseUrl, supabaseKey)
+
 
 
 
@@ -11,6 +19,25 @@ function App() {
     bike1: null,
     bike2: null
   })
+ 
+  const [manufacturerNames, setManufacturerNames] = useState([])
+
+  useEffect(() => {
+    const fetchManufacturers = async () => {
+      let { data, error } = await supabase
+        .from("manufacturer")
+        .select("name")
+        .order("name", { ascending: true })
+
+      if (error) {
+        console.error(error)
+      } else {
+        setManufacturerNames(data)
+      }
+    }
+
+    fetchManufacturers()
+  }, [])
 
   const [bike1, setBike1] = useState("Select First Motorcycle")
   const [bike2, setBike2] = useState("Select Second Motorcycle")
@@ -102,6 +129,18 @@ function App() {
               </div>
             </div>
           </div>
+
+
+        </div>
+
+        <div>
+          <ul className="list-disc list-inside space-y-1">
+          {manufacturerNames.map((item, index) => (
+            <li key={index} className="text-gray-700 text-lg">
+              {item.name}
+            </li>
+          ))}
+        </ul>
         </div>
       </main>
     </div>
