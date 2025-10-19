@@ -1,5 +1,10 @@
-import React from 'react'
+
 import { useState } from 'react'
+
+
+
+
+
 
 function App() {
   const [selectedBikes, setSelectedBikes] = useState({
@@ -59,7 +64,7 @@ function App() {
                 </div>
                 <div className="space-y-4">
                   <div className="h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-300">
-                    <p className="text-gray-500 font-medium">Select a motorcycle to compare</p>
+                    
                   </div>
                 </div>
               </div>
