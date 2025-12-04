@@ -1,12 +1,12 @@
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
+import { getBikeById } from '@services/motorcycles'
 
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
+// const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+// const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
+// export const supabase = createClient(supabaseUrl, supabaseKey)
 
 
 
@@ -20,23 +20,41 @@ function App() {
     bike2: null
   })
  
-  const [manufacturerNames, setManufacturerNames] = useState([])
+  const [manufacturerNames, setManufacturerNames] = useState({})
+  const [testName, setTestName] = useState(null)
+
+  
+    
+  
+  // useEffect(() => {
+  //   const fetchManufacturers = async () => {
+  //     let { data, error } = await supabase
+  //       .from('motorcycles')
+  //       .select('model_name')
+  //       // .order("model_name", { ascending: true})
+  //       .eq('id',4)
+
+  //     if (error) {
+  //       console.error(error)
+  //     } else {
+  //       setManufacturerNames(data)
+  //     }
+  //   }
+
+  //   fetchManufacturers()
+  // }, [])
 
   useEffect(() => {
-    const fetchManufacturers = async () => {
-      let { data, error } = await supabase
-        .from("manufacturer")
-        .select("name")
-        .order("name", { ascending: true })
-
-      if (error) {
-        console.error(error)
-      } else {
-        setManufacturerNames(data)
+    const loadBike = async () => {
+      try {
+        const bike = await getBikeById(3)   // this should return an object
+        setTestName(bike)                   
+      } catch (err) {
+        console.error('Error loading bike:', err)
       }
     }
 
-    fetchManufacturers()
+    loadBike()
   }, [])
 
   const [bike1, setBike1] = useState("Select First Motorcycle")
@@ -134,13 +152,7 @@ function App() {
         </div>
 
         <div>
-          <ul className="list-disc list-inside space-y-1">
-          {manufacturerNames.map((item, index) => (
-            <li key={index} className="text-gray-700 text-lg">
-              {item.name}
-            </li>
-          ))}
-        </ul>
+          {testName?.model_name}
         </div>
       </main>
     </div>
